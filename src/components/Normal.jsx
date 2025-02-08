@@ -1,8 +1,7 @@
-import React from "react";
-// import normalImg from "../../public/normal.jpg"; // Change the image path if needed
+import { useNavigate } from "react-router-dom";
 
 export default function Normal() {
-  
+  const navigate = useNavigate();
 
   return (
     <div className="relative min-h-screen flex items-center justify-center">
@@ -16,7 +15,12 @@ export default function Normal() {
        </h3>
        <h4 className="text-xl  mb-4 text-center">💬 Need assistance? Use our chatbot for maintenance tips and further diagnostics.
        </h4>
-
+       <button 
+            onClick={() => navigate('/')}
+            className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors cursor-pointer w-full"
+          >
+            ← Back to Prediction
+          </button>
        </div>
       </div>
     </div>
