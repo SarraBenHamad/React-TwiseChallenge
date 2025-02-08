@@ -11,6 +11,7 @@ export default function PredictiveMaintenance() {
     humidity: "",
   });
   const [result, setResult] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -23,6 +24,7 @@ export default function PredictiveMaintenance() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
     const response = await fetch("https://industrialequipment.onrender.com/predict", {
       method: "POST",
@@ -34,7 +36,6 @@ export default function PredictiveMaintenance() {
   
     const data = await response.json();
     setResult(data.prediction);
-    console.log(data)
 
 
     if (data.prediction === 1) {
@@ -44,6 +45,8 @@ export default function PredictiveMaintenance() {
       }
     } catch (error) {
       console.error("Error fetching prediction:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
   
@@ -83,18 +86,24 @@ export default function PredictiveMaintenance() {
             )
           ))}
           <button
-
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 cursor-pointer"
+            disabled={isLoading}
+            className={`w-full py-2 rounded-lg text-white ${
+              isLoading 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-blue-500 hover:bg-blue-600 cursor-pointer'
+            }`}
           >
-            Predict
+            {isLoading ? (
+              <div className="flex items-center justify-center">
+                <div className="w-5 h-5 border-t-2 border-b-2 border-white rounded-full animate-spin mr-2"></div>
+                Processing...
+              </div>
+            ) : (
+              'Predict'
+            )}
           </button>
         </form>
-        {result && (
-          <div className={`mt-4 p-3 text-center font-bold ${result === "Faulty" ? "text-red-500" : "text-green-500"}`}>
-            Result: {result}
-          </div>
-        )}
       </div>
     </div>
   );
